@@ -1,7 +1,9 @@
 package com.sample.currencyconversion.service.Impl;
 
 import com.sample.currencyconversion.model.CurrencyConversion;
+import com.sample.currencyconversion.remote.CurrencyExchangeFeignClient;
 import com.sample.currencyconversion.service.CurrencyConversionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -14,8 +16,17 @@ import static java.util.Objects.nonNull;
 @Service
 public class CurrencyConversionServiceImpl implements CurrencyConversionService {
 
+  @Autowired private CurrencyExchangeFeignClient remote;
+
   @Override
   public CurrencyConversion getConversion(String from, String to, BigDecimal quantity) {
+    final CurrencyConversion currencyConversion = remote.getCurrencyExchangeRate(from, to);
+    return currencyConversion.setTotalCalculatedAmount(
+        quantity.multiply(currencyConversion.getConversionMultiple()));
+  }
+
+  public CurrencyConversion getConversionUsingRestTemplate(
+      String from, String to, BigDecimal quantity) {
     final Map<String, String> uriVariables =
         Map.ofEntries(Map.entry("from", from), Map.entry("to", to));
 
