@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: populate_data.yml
+      author: currency_exchange_author
+      contextFilter: test,dev
+      changes:
+        - loadData:
+            columns:
+              - column:
+                  header: currency_from
+                  name: currency_from
+                  type: STRING
+              - column:
+                  header: currency_to
+                  name: currency_to
+                  type: STRING
+              - column:
+                  header: conversion_multiple
+                  name: conversion_multiple
+                  type: NUMERIC
+            commentLineStartsWith: //
+            encoding: UTF-8
+            file: currency_exchange.csv
+            quotchar: ''''
+            relativeToChangelogFile: true
+            schemaName: public
+            separator: ','
+            tableName: currency_exchange
+            usePreparedStatements: true

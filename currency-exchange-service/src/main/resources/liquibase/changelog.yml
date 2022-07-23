@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - include:
+      file: schema/1_create_currency_exchange_sequence.yml
+      relativeToChangelogFile: true
+  - include:
+      file: schema/2_create_currency_exchange_table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: data/populate_data.yml
+      relativeToChangelogFile: true

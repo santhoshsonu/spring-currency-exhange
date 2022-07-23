@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1_create_currency_exchange_sequence.yml
+      author: currency_exchange_author
+      changes:
+        - createSequence:
+            cacheSize: 371717
+            dataType: bigint
+            incrementBy: 1
+            minValue: 1000
+            ordered: true
+            schemaName: public
+            sequenceName: currency_exchange_seq
+            startValue: 1000
