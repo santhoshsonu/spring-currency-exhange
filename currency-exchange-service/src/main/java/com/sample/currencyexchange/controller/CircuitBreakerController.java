@@ -2,6 +2,8 @@ package com.sample.currencyexchange.controller;
 
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ public class CircuitBreakerController {
   @GetMapping
   // @Retry(name = "sample-api", fallbackMethod = "getFallbackResponse")
   @CircuitBreaker(name = "sample-api", fallbackMethod = "getFallbackResponse")
+  @RateLimiter(name = "sample-api", fallbackMethod = "getRateLimiterFallbackResponse")
   public ResponseEntity<String> simpleCircuitBreakerAPI() {
     log.info("Calling Remote API: {}", REMOTE_API);
     ResponseEntity<String> responseEntity;
@@ -35,5 +38,10 @@ public class CircuitBreakerController {
   private ResponseEntity<String> getFallbackResponse(CallNotPermittedException ex) {
     log.error("Circuit Breaker state is OPEN. Returning fallback response");
     return new ResponseEntity<>("Circuit Breaker fallback Response", HttpStatus.OK);
+  }
+
+  private ResponseEntity<String> getRateLimiterFallbackResponse(RequestNotPermitted ex) {
+    log.error("API threshold exceeded. Returning RateLimit fallback response");
+    return new ResponseEntity<>("RateLimit fallback Response", HttpStatus.OK);
   }
 }
