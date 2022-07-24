@@ -1,6 +1,7 @@
 package com.sample.currencyexchange.controller;
 
-import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,8 @@ public class CircuitBreakerController {
   private static final String REMOTE_API = "http://localhost:8080/no-existing-api";
 
   @GetMapping
-  @Retry(name = "sample-api", fallbackMethod = "getFallbackResponse")
+  // @Retry(name = "sample-api", fallbackMethod = "getFallbackResponse")
+  @CircuitBreaker(name = "sample-api", fallbackMethod = "getFallbackResponse")
   public ResponseEntity<String> simpleCircuitBreakerAPI() {
     log.info("Calling Remote API: {}", REMOTE_API);
     ResponseEntity<String> responseEntity;
@@ -27,6 +29,11 @@ public class CircuitBreakerController {
 
   private ResponseEntity<String> getFallbackResponse(RestClientException ex) {
     log.error("Remote API call error: {}", ex.getMessage());
-    return new ResponseEntity<>("Fallback Response", HttpStatus.OK);
+    return new ResponseEntity<>("API Fallback Response", HttpStatus.OK);
+  }
+
+  private ResponseEntity<String> getFallbackResponse(CallNotPermittedException ex) {
+    log.error("Circuit Breaker state is OPEN. Returning fallback response");
+    return new ResponseEntity<>("Circuit Breaker fallback Response", HttpStatus.OK);
   }
 }
