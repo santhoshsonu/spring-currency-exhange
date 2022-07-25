@@ -17,6 +17,7 @@ Currency exchange backend services using Spring Cloud based on Master Microservi
 ## Build
 - Build image for each service/project by running the maven goal:
   - <code>mvn spring-boot:build-image</code>
+  - <code>mvn spring-boot:build-image -DskipTests</code> <i>(Ignores App tests - recommended for test env only)</i>
  
 ## URLS
 
