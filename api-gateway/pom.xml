@@ -9,13 +9,15 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.spring-cloud.microservices</groupId>
-    <artifactId>api-gateway</artifactId>
+    <artifactId>currency-api-gateway</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>api-gateway</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>18</java.version>
         <spring-cloud.version>2021.0.3</spring-cloud.version>
+        <docker.username>armosdocker</docker.username>
+        <docker.prefix>spring-microservices</docker.prefix>
     </properties>
     <dependencies>
         <dependency>
@@ -60,6 +62,10 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <image>
+                        <name>${docker.username}/${docker.prefix}-${project.artifactId}:${project.version}</name>
+                    </image>
+                    <pullPolicy>IF_NOT_PRESENT</pullPolicy>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
