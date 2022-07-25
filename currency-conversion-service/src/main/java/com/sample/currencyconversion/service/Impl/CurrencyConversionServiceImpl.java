@@ -24,8 +24,9 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService 
   public CurrencyConversion getConversion(String from, String to, BigDecimal quantity) {
     log.info("Calling Remote GET Currency Exchange rate API for {} to {}", from, to);
     final CurrencyConversion currencyConversion = remote.getCurrencyExchangeRate(from, to);
-    return currencyConversion.setTotalCalculatedAmount(
-        quantity.multiply(currencyConversion.getConversionMultiple()));
+    return currencyConversion
+        .setQuantity(quantity)
+        .setTotalCalculatedAmount(quantity.multiply(currencyConversion.getConversionMultiple()));
   }
 
   public CurrencyConversion getConversionUsingRestTemplate(
