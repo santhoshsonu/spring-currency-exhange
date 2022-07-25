@@ -1,0 +1,51 @@
+version: '3.9'
+
+services:
+  currency-naming-server:
+    image: armosdocker/spring-microservices-currency-naming-server:0.0.1-SNAPSHOT
+    mem_reservation: 250M
+    ports:
+      - '8761:8761'
+    networks:
+      - currency-network
+
+  currency-api-gateway:
+    image: armosdocker/spring-microservices-currency-api-gateway:0.0.1-SNAPSHOT
+    mem_reservation: 250M
+    ports:
+      - '8765:8765'
+    networks:
+      - currency-network
+    depends_on:
+      - currency-naming-server
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://currency-naming-server:8761/eureka
+
+  currency-exchange-service:
+    image: armosdocker/spring-microservices-currency-exchange-service:0.0.1-SNAPSHOT
+    mem_reservation: 500M
+    ports:
+      - '8000:8000'
+    networks:
+      - currency-network
+    depends_on:
+      - currency-naming-server
+      - currency-api-gateway
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://currency-naming-server:8761/eureka
+
+  currency-conversion-service:
+    image: armosdocker/spring-microservices-currency-conversion-service:0.0.1-SNAPSHOT
+    mem_reservation: 250M
+    ports:
+      - '8100:8100'
+    networks:
+      - currency-network
+    depends_on:
+      - currency-naming-server
+      - currency-api-gateway
+    environment:
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://currency-naming-server:8761/eureka
+
+networks:
+  currency-network:
