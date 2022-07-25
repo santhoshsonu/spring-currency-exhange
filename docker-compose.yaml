@@ -9,6 +9,19 @@ services:
     networks:
       - currency-network
 
+  currency-zipkin-server:
+    image: openzipkin/zipkin:2.23
+    mem_reservation: 300M
+    ports:
+      - "9411:9411"
+    networks:
+      - currency-network
+    #    environment:
+    #      RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+    #    depends_on:
+    #      - rabbitmq
+    restart: always #Restart if there is a problem starting up
+
   currency-api-gateway:
     image: armosdocker/spring-microservices-currency-api-gateway:0.0.1-SNAPSHOT
     mem_reservation: 250M
@@ -20,6 +33,7 @@ services:
       - currency-naming-server
     environment:
       EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://currency-naming-server:8761/eureka
+      SPRING.ZIPKIN.BASEURL: http://currency-zipkin-server:9411
 
   currency-exchange-service:
     image: armosdocker/spring-microservices-currency-exchange-service:0.0.1-SNAPSHOT
@@ -33,6 +47,7 @@ services:
       - currency-api-gateway
     environment:
       EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://currency-naming-server:8761/eureka
+      SPRING.ZIPKIN.BASEURL: http://currency-zipkin-server:9411
 
   currency-conversion-service:
     image: armosdocker/spring-microservices-currency-conversion-service:0.0.1-SNAPSHOT
@@ -46,6 +61,7 @@ services:
       - currency-api-gateway
     environment:
       EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://currency-naming-server:8761/eureka
+      SPRING.ZIPKIN.BASEURL: http://currency-zipkin-server:9411
 
 networks:
   currency-network:
