@@ -2,7 +2,6 @@
 Currency exchange backend services using Spring Cloud based on Master Microservices with Spring Boot and Spring Cloud [Udemy] by in28Minutes Official
 
 # Docker
-
 ## Images
 
 - https://hub.docker.com/u/armosdocker
@@ -15,6 +14,10 @@ Currency exchange backend services using Spring Cloud based on Master Microservi
 - API GATEWAY
     - armosdocker/spring-microservices-api-gateway:0.0.1-SNAPSHOT
 
+## Build
+- Build image for each service/project by running the maven goal:
+  - <code>mvn spring-boot:build-image</code>
+ 
 ## URLS
 
 #### Currency Exchange Service
