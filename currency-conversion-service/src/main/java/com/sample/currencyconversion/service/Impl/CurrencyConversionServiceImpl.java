@@ -3,6 +3,7 @@ package com.sample.currencyconversion.service.Impl;
 import com.sample.currencyconversion.model.CurrencyConversion;
 import com.sample.currencyconversion.remote.CurrencyExchangeFeignClient;
 import com.sample.currencyconversion.service.CurrencyConversionService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,14 @@ import java.util.Map;
 import static java.util.Objects.nonNull;
 
 @Service
+@Slf4j
 public class CurrencyConversionServiceImpl implements CurrencyConversionService {
 
   @Autowired private CurrencyExchangeFeignClient remote;
 
   @Override
   public CurrencyConversion getConversion(String from, String to, BigDecimal quantity) {
+    log.info("Calling Remote GET Currency Exchange rate API for {} to {}", from, to);
     final CurrencyConversion currencyConversion = remote.getCurrencyExchangeRate(from, to);
     return currencyConversion.setTotalCalculatedAmount(
         quantity.multiply(currencyConversion.getConversionMultiple()));

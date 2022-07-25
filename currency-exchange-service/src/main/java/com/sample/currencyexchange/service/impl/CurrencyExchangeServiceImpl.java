@@ -3,15 +3,20 @@ package com.sample.currencyexchange.service.impl;
 import com.sample.currencyexchange.model.CurrencyExchange;
 import com.sample.currencyexchange.repository.CurrencyExchangeRepository;
 import com.sample.currencyexchange.service.CurrencyExchangeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
 import static java.util.Objects.nonNull;
 
 @Service
+@Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
+@Slf4j
 public class CurrencyExchangeServiceImpl implements CurrencyExchangeService {
 
   private static final String PORT_PROPERTY_KEY = "local.server.port";
@@ -23,6 +28,7 @@ public class CurrencyExchangeServiceImpl implements CurrencyExchangeService {
 
   @Override
   public CurrencyExchange getExchangeRate(String from, String to) {
+    log.info("Get Exchange Rate from {} to {}", from, to);
     final String port = environment.getProperty(PORT_PROPERTY_KEY);
     if (nonNull(from) && nonNull(to) && from.equals(to)) {
       return new CurrencyExchange()
