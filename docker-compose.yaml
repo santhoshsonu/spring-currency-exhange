@@ -3,7 +3,7 @@ version: '3.9'
 services:
   currency-naming-server:
     image: armosdocker/spring-microservices-currency-naming-server:0.0.1-SNAPSHOT
-    mem_reservation: 250M
+    mem_reservation: 100M
     ports:
       - '8761:8761'
     networks:
@@ -11,7 +11,7 @@ services:
 
   currency-rabbitmq:
     image: rabbitmq
-    mem_reservation: 300M
+    mem_reservation: 250M
     ports:
       - '5672:5672'
       - '15672:15672'
@@ -20,7 +20,7 @@ services:
 
   currency-zipkin-server:
     image: openzipkin/zipkin:2.23
-    mem_reservation: 300M
+    mem_reservation: 250M
     ports:
       - "9411:9411"
     networks:
@@ -33,7 +33,7 @@ services:
 
   currency-api-gateway:
     image: armosdocker/spring-microservices-currency-api-gateway:0.0.1-SNAPSHOT
-    mem_reservation: 250M
+    mem_reservation: 150M
     ports:
       - '8765:8765'
     networks:
@@ -50,7 +50,7 @@ services:
 
   currency-exchange-service:
     image: armosdocker/spring-microservices-currency-exchange-service:0.0.1-SNAPSHOT
-    mem_reservation: 500M
+    mem_reservation: 250M
     ports:
       - '8000:8000'
     networks:
