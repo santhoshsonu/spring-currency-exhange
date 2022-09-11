@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2_create_currency_exchange_table.yml
+      author: currency_exchange_author
+      changes:
+        - createTable:
+            tableName: currency_exchange
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  defaultValueComputed: "nextval('currency_exchange_seq')"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    primaryKeyName: pk_currency_exchange
+              - column:
+                  name: currency_from
+                  type: nvarchar(3)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency_to
+                  type: nvarchar(3)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: conversion_multiple
+                  type: currency
+                  constraints:
+                    nullable: false
